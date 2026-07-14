@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: demo
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  booking:
+    build:
+      context: .
+      dockerfile: Dockerfile.booking
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_DSN=postgres://postgres:pass@postgres:5432/demo?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  notifier:
+    build:
+      context: .
+      dockerfile: Dockerfile.notifier
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      - DB_DSN=postgres://postgres:pass@postgres:5432/demo?sslmode=disable
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:

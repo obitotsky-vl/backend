@@ -1,0 +1,27 @@
+{
+    "server_port": "8080",
+    "business_id": "salon-001",
+    "business_name": "Beauty Studio",
+    "timezone": "Asia/Vladivostok",
+    "features": {
+        "has_deposit_payment": false,
+        "has_multiple_branches": true,
+        "auto_register": true
+    },
+    "notification_method": "telegram",
+    "telegram": {
+        "bot_token": "YOUR_BOT_TOKEN",
+        "admin_chat_id": "123456789"
+    },
+    "services": [
+        {
+            "id": "men_haircut",
+            "name": "Мужская стрижка",
+            "duration_minutes": 30,
+            "price": 1500,
+            "metadata": {
+                "category": "hair"
+            }
+        }
+    ]
+}
